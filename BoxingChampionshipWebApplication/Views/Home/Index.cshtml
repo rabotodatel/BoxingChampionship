@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Boxing Championship";
+}
+
+<br />
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+
+<link href="~/Content/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="~/Scripts/i18n/grid.locale-en.js"></script>
+    <script src="~/Scripts/jquery.jqGrid.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.0.min.js"></script>
+
+    <script>
+        $(function () {
+            $grid = $("#jqGrid").jqGrid({
+                url: '@Url.Action("GetData","Home")',
+                pager: '#jqGridPager',
+                mtype: 'GET',
+                datatype: 'json',
+                rownumbers: true,
+                jsonReader: { repeatitems: false },
+                colModel: [
+                    { label: 'Name', name: 'Name' },
+                    { label: 'Amount of Battles', name: 'AmountOfBattles' },
+                    { label: 'Wins', name: 'Wins' }
+                ],
+                loadonce: true,
+                height: '100%'
+            });
+            $('.ui-jqgrid .ui-jqgrid-bdiv').css('overflow-x', 'hidden');
+            $('.ui-jqgrid .ui-pg-input').css('color', 'black');
+        });
+    </script>
+}

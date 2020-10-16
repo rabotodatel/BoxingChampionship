@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Page of Championship";
+}
+
+<br />
+<table id="jqGrid"></table>
+<div id="jqGridPager"></div>
+
+<link href="~/Content/themes/base/minified/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.jqGrid/ui.jqgrid.css" rel="stylesheet" />
+
+@section scripts{
+    <script src="~/Scripts/i18n/grid.locale-en.js"></script>
+    <script src="~/Scripts/jquery.jqGrid.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.0.min.js"></script>
+
+    <script>
+        $(function () {
+            $grid = $("#jqGrid").jqGrid({
+                url: '@Url.Action("GetData","Championship")',
+                pager: '#jqGridPager',
+                mtype: 'GET',
+                datatype: 'json',
+                jsonReader: { repeatitems: false },
+                colModel: [
+                    { name: 'Id', key: true, hidden: true },
+                    { label: 'Boxer 1', name: 'BoxerOne', editable: true },
+                    { label: 'Boxer 2', name: 'BoxerTwo', editable: true },
+                    { label: 'Boxer 1 Points', name: 'RefereePointsOne', editable: true },
+                    { label: 'Boxer 2 Points', name: 'RefereePointsTwo', editable: true },
+                    { label: 'Amount of Rounds', name: 'AmountOfRounds', editable: true },
+                    { label: 'Date', name: 'Date', formatter: "date", formatoptions: { newformat: "m/d/Y" }, editable: true }
+                ],
+                loadonce: true,
+                height: '100%'
+            }).navGrid('#jqGridPager', { edit: true, add: true, search: true, refresh: true },
+                {
+                    //Edit
+                    url: '/Championship/UpdateBattle',
+                    closeAfterEdit: true,
+                    afterComplete: function (response) {
+                        $('#jqGrid').setGridParam({ datatype: 'json' }).trigger('reloadGrid');
+                        alert(response.responseText)
+                    }
+                },
+                {
+                    //Add
+                    url: '/Championship/InsertBattle',
+                    closeAfterAdd: true,
+                    afterComplete: function (response) {
+                        $('#jqGrid').setGridParam({ datatype: 'json' }).trigger('reloadGrid');
+                        alert(response.responseText)
+                    }
+                },
+                {
+                    //Delete
+                    url: '/Championship/DeleteBattle',
+                    closeAfterDelete: true,
+                    afterComplete: function (response) {
+                        $('#jqGrid').setGridParam({ datatype: 'json' }).trigger('reloadGrid');
+                        alert(response.responseText)
+                    }
+                }
+            );
+            $('.ui-jqgrid .ui-jqgrid-bdiv').css('overflow-x', 'hidden');
+            $('.ui-jqgrid .ui-pg-input').css('color', 'black');
+            $('#jqg1.input-elm').css('color', 'black');
+            $('.ui-widget .ui-widget').css('color', 'black');
+            $('.ui-widget .ui-widget-content').css('background-color', 'black');
+            $('.group.ui-widget.ui-widget-content').css('color', 'black');
+        });
+    </script>
+}
